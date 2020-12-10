@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # Requires PyAudio and PySpeech.
-
+# Requires a contacts.txt file with each line containing a name and phone number seperated by a space
 import speech_recognition as sr
 from time import ctime
 import time
