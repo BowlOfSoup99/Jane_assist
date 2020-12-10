@@ -89,7 +89,8 @@ def jane(name,data):
     name = str(name)+" "
     if name+"how are you" in data:
         speak("I am fine, thanks")
-
+    if name+"see you later" in data or name+"bye" in data:
+        exit()
     if name+"what time is it" in data:
         print(time.ctime())
         speak(time.ctime())
@@ -127,20 +128,42 @@ def jane(name,data):
         os.system(istekram + "&")
     if name+"configuration" in data:
         configMenu()
+    else:
+        pass	
 def configMenu():
+	i = 0
 	optionsAvibles= """
 	1) change your username
 	2) what do you want to call me
+	3) going back
 	"""
 	filename = "config"
-	print(optionsAvibles)
+	attempts = 3
 	speak(optionsAvibles)
 	configurations = loadConfigurations()
-	option = recordAudio()
-	if option == "change your username" or "1":
-		configurations[0] = recordAudio()
-	elif option == "what do you want to call me" or "2":
-		configurations[1] = recordAudio()
+	tmpConfigurations = configurations	
+	while i < attempts:
+		option = recordAudio()
+		if option == "change your username" or "1":
+			speak("how is you new username?")
+			configurations[0] = recordAudio()
+			verification = recordAudio()
+			speak("ok ,"+configurations[0]+" is right?")
+			if verification == "yes"
+				speak("ok ,"+configurations[0]+" Nice to meet you again ")
+				break
+		elif option == "what do you want to call me" or "2":
+			speak("how you want to call me?")
+			configurations[1] = recordAudio()
+			speak("ok ,"+configurations[1]+" is right?")
+			if verification == "yes"
+				speak(configurations[1]+" ? i like that name ")
+				break
+		elif option == "going back" or "3":
+			speak("as you wish it could be another time")
+			configurations = tmpConfigurations 
+			break
+		speak("I couldn't understand you")
 	writetxt(filename,configurations)
 #def configJane(option):
 def banner():
@@ -155,8 +178,7 @@ def banner():
 # initialization
 banner()
 configurations = loadConfigurations()
-speak("Hi "+configurations[0]+", how can I help?")
-
+speak("Hi "+configurations[0]+",I am "+configurations[1]+", how can I help?")
 while True:
     time.sleep(0.2)
     data = recordAudio()
