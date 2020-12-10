@@ -183,4 +183,3 @@ while True:
     time.sleep(0.2)
     data = recordAudio()
     jane(configurations[1],data)
-
