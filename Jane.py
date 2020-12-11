@@ -8,7 +8,7 @@ from gtts import gTTS
 import webbrowser
 
 my_file = "contacts.txt"
-
+phone = 's20'
 def banner():
 	print("""
      _                                 Virtual
@@ -19,19 +19,35 @@ def banner():
                          |_|    |___/ 
 	""")
 # initialization
+banner()
+
+numbers = []
+names = []
+    # open file in read mode
+with open(my_file, 'r') as file_handle:
+    # convert file contents into a list
+    lines = file_handle.read().splitlines()
+    for i, val in enumerate(lines): 
+            #split each line and appends name and number to respective list                
+        person = val.split(" ", 1)
+        names.append(person[0])
+        numbers.append(person[1])
+        if(i + 1 >= len(lines)):
+            break
+            my_file.close()
 
 def speak(audioString):
     print(audioString)
     tts = gTTS(text=audioString, lang='en')
     tts.save("audio.mp3")
-    os.system("mpg123 audio.mp3")
+    os.system("mpg123 audio.mp3 2 >/dev/null")
 
 def recordAudio():
     # Record Audio
     r = sr.Recognizer()
     with sr.Microphone() as source:
         banner()
-        print("Say something:")
+        print("Say a command:")
         audio = r.listen(source)
     
         # Speech recognition using Google Speech Recognition
@@ -47,40 +63,7 @@ def recordAudio():
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
     
         return data
-    
-def sendSMS():
-    numbers = []
-    names = []
-    speak("Select acontact by number: ")   
 
-        # open file in read mode
-    with open(my_file, 'r') as file_handle:
-            # convert file contents into a list
-        lines = file_handle.read().splitlines()
-        for i, val in enumerate(lines): 
-            #split each line and appends name and number to respective list                
-            person = val.split(" ", 1)
-            names.append(person[0])
-            numbers.append(person[1])
-            print(i, names[i], numbers[i])
-            if(i + 1 >= len(lines)):
-                break
-                my_file.close()
-    
-    data = recordAudio()        
-    i = data
-    i = int(i)
-    dest = numbers[i]
-    speak("Record your message")
-    data = recordAudio()
-    message = data
-    speak("Would you like to send " + message + " to " + names[i] + "?")
-    data = recordAudio()
-    if "yes" in data:
-        os.system("kdeconnect-cli --send-sms '%s' -n s20 --destination %s"  % (message, dest))
-        speak("Message sent to " + names[i])
-
-        
 def jarvis(data):
     if "how are you" in data:
         speak("I am fine, thanks")
@@ -112,16 +95,29 @@ def jarvis(data):
     if "hey Jane" in data:
         speak("Hey Tim, what's up?")
         
-    if "send text" in data:
-        sendSMS()
-        
-    if "open Instagram" in data:
+    if "send" and "text" in data:
+        speak("Select contact number: \n")
+        banner()
+        for c, val in enumerate(lines): 
+            print(c, names[c], numbers[c])
+        data = recordAudio()        
+        i = data
+        i = int(i)
+        dest = numbers[i]
+        speak("Record your message")
+        data = recordAudio()
+        message = data
+        speak("Would you like to send " + message + " to " + names[i] + "?")
+        data = recordAudio()
+        if "yes" in data:
+            os.system("kdeconnect-cli --send-sms '%s' -n %s --destination %s"  % (message,phone, dest))
+            speak("Message sent to " + names[i])
+
+    if "Instagram" in data:
         instagram = 'istekram'
         os.system(instagram + "&")
     
-# initialization
-time.sleep(.5)
-banner()
+time.sleep(.2)
 speak("Hi Tim, how can I help?")
 while 1:
     data = recordAudio()
