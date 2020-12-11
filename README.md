@@ -3,6 +3,9 @@ Based on jarves for python and modified to send text messages through kdeconnect
 ### run and talk
 	chmod 755 Jane.py
 	./Jane.py
+### method 2
+	python3 Jane.py
+
 ### dependencies
 PyAudio
 
