@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # Requires PyAudio and PySpeech.
 # Requires a contacts.txt file with each line containing a name and phone number seperated by a space
-# maria best name for machine undestanding
 import speech_recognition as sr
 import time
 import os
@@ -149,21 +148,22 @@ def configMenu():
 			configurations[0] = recordAudio()
 			verification = recordAudio()
 			speak("ok ,"+configurations[0]+" is right?")
-			if verification == "yes"
+			if verification == "yes":
 				speak("ok ,"+configurations[0]+" Nice to meet you again ")
 				break
 		elif option == "what do you want to call me" or "2":
 			speak("how you want to call me?")
 			configurations[1] = recordAudio()
 			speak("ok ,"+configurations[1]+" is right?")
-			if verification == "yes"
+			if verification == "yes":
 				speak(configurations[1]+" ? i like that name ")
 				break
 		elif option == "going back" or "3":
 			speak("as you wish it could be another time")
 			configurations = tmpConfigurations 
 			break
-		speak("I couldn't understand you")
+		else:
+			speak("I couldn't understand you")
 	writetxt(filename,configurations)
 #def configJane(option):
 def banner():
