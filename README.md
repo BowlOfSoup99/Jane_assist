@@ -1,8 +1,8 @@
 # Jane_assist
 Based on jarves for python and modified to send text messages through kdeconnect-cli
 ### run and talk
-chmod 755 Jane.py
-./Jane.py
+	chmod 755 Jane.py
+	./Jane.py
 ### dependencies
 PyAudio
 
