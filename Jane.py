@@ -49,9 +49,10 @@ def recordAudio():
             print("You said: " + data)
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand audio")
+            speak("I couldn't understand you")
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
-    
+        data = data.lower()
         return data
     
 def sendSMS():
@@ -88,7 +89,7 @@ def jane(name,data):
     name = str(name)+" "
     if name+"how are you" in data:
         speak("I am fine, thanks")
-    if name+"see you later" in data or name+"bye" in data:
+    if name+"see you later" in data or "bye "+name in data or name+"bye" in data:
         exit()
     if name+"what time is it" in data:
         print(time.ctime())
@@ -146,16 +147,23 @@ def configMenu():
 		if option == "change your username" or "1":
 			speak("how is you new username?")
 			configurations[0] = recordAudio()
+			speak("ok ,"+configurations[0]+" is right?"+"""
+			1) yes			
+			""")
 			verification = recordAudio()
-			speak("ok ,"+configurations[0]+" is right?")
-			if verification == "yes":
+			if verification == "yes" or verification == "1":
 				speak("ok ,"+configurations[0]+" Nice to meet you again ")
 				break
+			else:
+				pass
 		elif option == "what do you want to call me" or "2":
 			speak("how you want to call me?")
+			speak("ok ,"+configurations[1]+" is right?"+"""
+			1) yes
+
+			""")
 			configurations[1] = recordAudio()
-			speak("ok ,"+configurations[1]+" is right?")
-			if verification == "yes":
+			if verification == "yes" or verification == "1":
 				speak(configurations[1]+" ? i like that name ")
 				break
 		elif option == "going back" or "3":
@@ -163,7 +171,7 @@ def configMenu():
 			configurations = tmpConfigurations 
 			break
 		else:
-			speak("I couldn't understand you")
+			pass
 	writetxt(filename,configurations)
 #def configJane(option):
 def banner():
@@ -176,10 +184,13 @@ def banner():
                          |_|    |___/ 
 	""")
 # initialization
-banner()
-configurations = loadConfigurations()
-speak("Hi "+configurations[0]+",I am "+configurations[1]+", how can I help?")
-while True:
-    time.sleep(0.2)
-    data = recordAudio()
-    jane(configurations[1],data)
+def main():
+	banner()
+	configurations = loadConfigurations()
+	speak("Hi "+configurations[0]+",I am "+configurations[1]+", how can I help?")
+	while True:
+    		time.sleep(0.5)
+    		data = recordAudio()
+    		jane(configurations[1],data)
+if __name__ == "__main__":
+	main()
