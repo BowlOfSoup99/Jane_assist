@@ -1,2 +1,4 @@
-Example1 1234567
-Example2 8910111
+# Name and Number must be in this format
+
+Example1:1234567
+Example2:8910111
