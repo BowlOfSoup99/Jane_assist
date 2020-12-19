@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Requires PyAudio and PySpeech.
 
 import speech_recognition as sr
@@ -103,6 +103,62 @@ def jarvis(data):
         location = data[2]
         speak("Hold on Tim, I will show you where " + location + " is.")
         webbrowser.open_new_tab("https://www.google.com/maps/place/" + location + "/&amp;")
+        
+    if "search for" in data:
+        data = data.split(" ", 2)
+        search = data[2]
+        speak("Hold on Tim, I will search for " + search)
+        webbrowser.open_new_tab('http://www.google.com/search?btnG=1&q=' + search)
+        
+    if "start" in data:
+        data = data.split(" ", 1)
+        start = data[1]
+        speak("Starting " + start)
+        os.system(start + "&")
+        
+    if "signal" in data:
+        os.system("signal-desktop &")
+        
+    if "hey Jane" in data:
+        speak("Hey Tim, what's up?")
+        
+    if "send" and "text" in data:
+        selCon()
+
+    if "contacts" in data:
+        for i, val in enumerate(lines):
+            print(i, names[i] + ' : ' + numbers[i])
+        if i <= len(names):
+            speak("Whos number would you like?")
+            data = recordAudio()
+            if data.isalpha():
+                cap = data.title()
+                i = names.index(cap)
+                dest = numbers[i]
+                dest = str(dest)
+
+            else:
+                cap = data
+                i = int(cap)
+                dest = numbers[i]
+                dest = str(dest)
+
+            for y in range(10):
+                speak(dest[y])
+
+
+    if "Instagram" in data:
+        instagram = 'istekram'
+        os.system(instagram + "&")
+    
+time.sleep(.2)
+speak("Hi Tim, how can I help?")
+while 1:
+    os.system('clear')
+    data = recordAudio()
+    jarvis(data)
+
+
         
     if "search for" in data:
         data = data.split(" ", 2)
