@@ -28,19 +28,46 @@ with open(my_file, 'r') as file_handle:
     # convert file contents into a list
     lines = file_handle.read().splitlines()
     for i, val in enumerate(lines): 
-            #split each line and appends name and number to respective list                
-        person = val.split(" ", 1)
+            #split each line and appends name and number to respective list
+        person = val.split(":", 1)
         names.append(person[0])
-        numbers.append(person[1])
+        numbers.append(str(person[1]))
         if(i + 1 >= len(lines)):
             break
             my_file.close()
+
+def selCon():
+
+
+    for i, val in enumerate(lines):
+        print(i, names[i] + ' : ' + numbers[i])
+    if i <= len(names):
+        speak("Whos number would you like?")
+        data = recordAudio()
+        if data.isalpha():
+            cap = data.title()
+            i = names.index(cap)
+            dest = numbers[i]
+        else:
+            cap = data
+            i = int(cap)
+            dest = numbers[i]
+
+    speak("Record your message to %s "% (names[i]))
+    data = recordAudio()
+    message = data
+    speak("Would you like to send " + message + " to " + names[i] + "?")
+    data = recordAudio()
+    if "yes" in data:
+        os.system("kdeconnect-cli --send-sms '%s' -n %s --destination %s" % (message, phone, dest))
+        speak("Message sent to %s "% (names[i]))
+
 
 def speak(audioString):
     print(audioString)
     tts = gTTS(text=audioString, lang='en')
     tts.save("audio.mp3")
-    os.system("mpg123 audio.mp3 2 >/dev/null")
+    os.system("mpg123 audio.mp3 2>&1 >/dev/null")
 
 def recordAudio():
     # Record Audio
@@ -96,22 +123,20 @@ def jarvis(data):
         speak("Hey Tim, what's up?")
         
     if "send" and "text" in data:
-        speak("Select contact number: \n")
-        banner()
-        for c, val in enumerate(lines): 
-            print(c, names[c], numbers[c])
-        data = recordAudio()        
-        i = data
-        i = int(i)
-        dest = numbers[i]
-        speak("Record your message")
-        data = recordAudio()
-        message = data
-        speak("Would you like to send " + message + " to " + names[i] + "?")
-        data = recordAudio()
-        if "yes" in data:
-            os.system("kdeconnect-cli --send-sms '%s' -n %s --destination %s"  % (message,phone, dest))
-            speak("Message sent to " + names[i])
+        selCon()
+
+    if "contacts" in data:
+        for i, val in enumerate(lines):
+            print(names[i] + ' : ' + numbers[i])
+        if i <= len(names):        
+            speak("Whos number would you like?")
+            data = recordAudio()
+            cap = data.title()
+            i = names.index(cap)
+            numb = numbers[i]
+            for x in numbers[i]:
+                speak(x)
+            print(names[i], ":", numbers[i])
 
     if "Instagram" in data:
         instagram = 'istekram'
@@ -120,5 +145,7 @@ def jarvis(data):
 time.sleep(.2)
 speak("Hi Tim, how can I help?")
 while 1:
+    os.system('clear')
     data = recordAudio()
     jarvis(data)
+
