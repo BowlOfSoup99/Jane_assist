@@ -14,7 +14,9 @@ PyAudio
 or
 this work for me
 
-        conda install PyAudio
+      conda install PyAudio
+      or
+      apt install python3-pyaudio
 gtts
 
         pip install gtts
